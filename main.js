@@ -18,6 +18,7 @@ const printBoard = () =>  {
 }
 
 const generateSolution = () =>  {
+  solution = "";
   for (let i = 0; i < 4; i++) {
     const randomIndex = getRandomInt(0, letters.length);
     solution += letters[randomIndex];
@@ -28,14 +29,69 @@ const getRandomInt = (min, max) => {
   return Math.floor(Math.random() * (max - min)) + min;
 }
 
-const generateHint = () =>  {
+const generateHint = (guess) =>  {
   // your code here
+  let solutionArray = solution.split('');
+  let guessArray = guess.split('');
+  let correctLetterLocations = 0;
+  let correctLetter = 0;
+
+  //Determine location accuracy
+  for(let i = 0; i < 4; i++){
+    if(solutionArray[i] === guessArray[i]){
+      correctLetterLocations++;
+      solutionArray[i] = null;
+    }
+  }
+
+  //Determine letter accuracy
+  for(let i = 0; i < 4; i++){
+    let targetIndex = solutionArray.indexOf(guessArray[i]);
+    if(targetIndex > -1){
+      correctLetter++;
+      solutionArray[targetIndex] = null;
+    }
+  }
+
+  //Return results
+  console.log(correctLetterLocations + "-" + correctLetter)
+  return correctLetterLocations + '-' + correctLetter;
 }
 
 const mastermind = (guess) => {
-  solution = 'abcd'; // Comment this out to generate a random solution
+  //solution = 'abcd'; // Comment this out to generate a random solution
   // your code here
-}
+    let hint = guess.concat(generateHint(guess));
+    board.push(hint)
+    if (board.length == 10) {
+      console.log('You ran out of turns!');
+      console.log('The solutions was ' + solution);
+      console.log('Generating a new solution');
+      generateSolution();
+      board = [];
+    }
+
+    if (guess === solution){
+      console.log('You guessed it!');
+      return 'You guessed it!';
+    } else {
+      console.log('Guess again.');
+      return 'Guess again.';
+    }
+  }
+   // }else {
+    //if (guess.length === 4 && guess !== solution){
+    //generateHint(guess);
+    //addHint(guess);
+     
+   
+    // else if (guess === solution){
+    // return 'You guessed it!';
+    // else {
+    // addHint(guess);
+    // }
+   
+    //Test
 
 
 const getPrompt = () =>  {
@@ -75,3 +131,4 @@ if (typeof describe === 'function') {
   generateSolution();
   getPrompt();
 }
+
